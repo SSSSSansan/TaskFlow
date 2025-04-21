@@ -10,12 +10,15 @@
   <div>
     <input [(ngModel)]="newTaskTitle" placeholder="Task Title" />
     <textarea [(ngModel)]="newTaskDescription" placeholder="Task Description"></textarea>
+    
     <select [(ngModel)]="newTaskCategory">
-      <option *ngFor="let category of categories" [value]="category.name">{{ category.name }}</option>
+      <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
     </select>
+    
     <select [(ngModel)]="newTaskStatus">
-      <option *ngFor="let status of statuses" [value]="status.name">{{ status.name }}</option>
+      <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
     </select>
+    
     <button (click)="createTask()">Create Task</button>
   </div>
 </div>
