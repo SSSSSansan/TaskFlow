@@ -1,8 +1,23 @@
 <div class="task-list">
-    <div *ngFor="let task of tasks">
-      <h2>{{ task.title }}</h2>
-      <p>{{ task.description }}</p>
-      <a [routerLink]="['/tasks', task.id]">Edit</a>
-    </div>
+  <h3>В планах</h3>
+  <div *ngFor="let task of tasksInPlans">
+    <h2>{{ task.title }}</h2>
+    <p>{{ task.description }}</p>
   </div>
-  
+</div>
+
+<div class="task-list">
+  <h3>В процессе</h3>
+  <div *ngFor="let task of tasksInProgress">
+    <h2>{{ task.title }}</h2>
+    <p>{{ task.description }}</p>
+  </div>
+</div>
+
+<div class="task-list">
+  <h3>Готово</h3>
+  <div *ngFor="let task of tasksCompleted">
+    <h2>{{ task.title }}</h2>
+    <p>{{ task.description }}</p>
+  </div>
+</div>

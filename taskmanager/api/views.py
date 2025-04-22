@@ -7,6 +7,31 @@ from .serializers import TaskSerializer, CategorySerializer, UserLoginSerializer
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
+from django.http import JsonResponse
+from .utils import validate_token
+
+def validate_token(token):
+    try:
+        decoded_token = jwt.decode(token, 'your_secret_key', algorithms=["HS256"])
+        print("Token is valid:", decoded_token)
+        return decoded_token
+    except jwt.ExpiredSignatureError:
+        return None
+    except jwt.InvalidTokenError:
+        return None
+    
+@api_view(['POST'])
+def my_view(request):
+    token = request.headers.get('Authorization').split(' ')[1]  # Получаем токен из заголовка
+    decoded_token = validate_token(token)
+
+    if decoded_token:
+        # Если токен валиден, продолжите выполнение логики
+        return JsonResponse({'message': 'Token is valid!'}, status=200)
+    else:
+        # Если токен не валиден, возвращаем ошибку
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -50,8 +75,14 @@ class TaskListCreate(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Task.objects.filter(user=self.request.user)
+        status = self.request.query_params.get('status', None)  # Получаем статус из параметров запроса
+        queryset = Task.objects.filter(user=self.request.user)
 
+        if status:
+            queryset = queryset.filter(status=status)  # Фильтруем по статусу
+
+        return queryset
+    
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 

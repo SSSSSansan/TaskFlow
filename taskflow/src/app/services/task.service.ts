@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -19,12 +19,15 @@ export class TaskService {
   }
 
   createTask(task: any): Observable<any> {
-    return this.http.post(this.apiUrl, task);
+    return this.http.post(this.apiUrl, task, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`)
+    });
   }
+  
 
-  updateTask(task: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}${task.id}/`, task);
-  }
+  updateTask(taskId: number, taskData: any): Observable<any> {
+    return this.http.put(`/api/tasks/${taskId}/`, taskData);
+  }  
 
   deleteTask(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}${id}/`);

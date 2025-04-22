@@ -1,25 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../../services/task.service';
-import { RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common'; // ⬅️ ВАЖНО
 
 @Component({
   selector: 'app-dashboard',
-  standalone: true,
-  imports: [CommonModule, RouterLink], // ⬅️ Добавь CommonModule
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
-  tasks: any[] = []; // Добавь тип any[] для безопасности
+export class DashboardComponent implements OnInit {
+  tasks: any[] = [];
+  tasksInPlans: any[] = [];
+  tasksInProgress: any[] = [];
+  tasksCompleted: any[] = [];
 
-  constructor(private taskService: TaskService) {
+  constructor(private taskService: TaskService) {}
+
+  ngOnInit() {
     this.loadTasks();
   }
 
   loadTasks() {
-    this.taskService.getTasks().subscribe((data: any[]) => {
-      this.tasks = data;
+    this.taskService.getTasks().subscribe((tasks) => {
+      this.tasks = tasks;
+      this.tasksInPlans = tasks.filter(task => task.status.name === 'В планах');
+      this.tasksInProgress = tasks.filter(task => task.status.name === 'В процессе');
+      this.tasksCompleted = tasks.filter(task => task.status.name === 'Готово');
     });
   }
 }

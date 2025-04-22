@@ -1,13 +1,22 @@
 <div class="task-form">
-    <h2>{{ isEditMode ? 'Edit Task' : 'Create Task' }}</h2>
-    <form (ngSubmit)="saveTask()">
+  <h2>{{ isEditMode ? 'Edit Task' : 'Create Task' }}</h2>
+  <form (ngSubmit)="saveTask()">
       <label for="title">Title</label>
       <input type="text" id="title" [(ngModel)]="task.title" name="title" required />
-  
+
       <label for="description">Description</label>
       <textarea id="description" [(ngModel)]="task.description" name="description" required></textarea>
-  
+
+      <label for="status">Status</label>
+      <select id="status" [(ngModel)]="task.status" name="status" required>
+          <option *ngFor="let status of statuses" [value]="status.id">{{ status.name }}</option>
+      </select>
+
+      <label for="category">Category</label>
+      <select id="category" [(ngModel)]="task.category" name="category" required>
+          <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+      </select>
+
       <button type="submit">{{ isEditMode ? 'Update Task' : 'Create Task' }}</button>
-    </form>
-  </div>
-  
+  </form>
+</div>

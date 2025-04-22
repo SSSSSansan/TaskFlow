@@ -3,9 +3,10 @@ from .models import Task, Category, Status
 from django.contrib.auth.models import User
 
 class TaskSerializer(serializers.ModelSerializer):
+    status = serializers.PrimaryKeyRelatedField(queryset=Status.objects.all())
     class Meta:
         model = Task
-        fields = '__all__'
+        fields = ['id', 'title', 'description', 'status', 'user', 'category', 'created_at', 'updated_at']
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
