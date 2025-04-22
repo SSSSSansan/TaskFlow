@@ -1,5 +1,5 @@
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import generics, status
 from .models import Task, Category, Status
@@ -9,14 +9,31 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
+@authentication_classes([])
 def login_view(request):
     serializer = UserLoginSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    user = authenticate(**serializer.validated_data)
-    if user:
-        refresh = RefreshToken.for_user(user)
-        return Response({'access': str(refresh.access_token), 'refresh': str(refresh)})
-    return Response({'error': 'Invalid credentials'}, status=400)
+
+    if serializer.is_valid():
+        username = serializer.validated_data['username']
+        password = serializer.validated_data['password']
+        print("Received:", username, password)  # 🔍 Проверка
+
+        user = authenticate(username=username, password=password)
+
+        if user:
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'access': str(refresh.access_token),
+                'refresh': str(refresh)
+            }, status=status.HTTP_200_OK)
+        else:
+            print("❌ Invalid credentials for:", username)
+            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
+    else:
+        print("❌ Invalid data format:", serializer.errors)
+        return Response({'error': 'Invalid data'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

@@ -9,7 +9,7 @@ export class TaskService {
   private apiUrl = 'http://localhost:8000/api/tasks/'; // URL для API
 
   constructor(private http: HttpClient) {}
-
+ 
   getTasks(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }
