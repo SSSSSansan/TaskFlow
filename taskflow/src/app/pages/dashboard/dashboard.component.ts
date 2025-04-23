@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../../services/task.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -19,11 +22,12 @@ export class DashboardComponent implements OnInit {
   }
 
   loadTasks() {
-    this.taskService.getTasks().subscribe((tasks) => {
-      this.tasks = tasks;
-      this.tasksInPlans = tasks.filter(task => task.status.name === 'В планах');
-      this.tasksInProgress = tasks.filter(task => task.status.name === 'В процессе');
-      this.tasksCompleted = tasks.filter(task => task.status.name === 'Готово');
+    this.taskService.getTasks().subscribe((tasks: any[]) => {
+      this.tasksInPlans = tasks.filter((task) => task.status && task.status.name === 'В планах');
+      this.tasksInProgress = tasks.filter((task) => task.status && task.status.name === 'В процессе');
+      this.tasksCompleted = tasks.filter((task) => task.status && task.status.name === 'Готово');
     });
   }
+  
+  
 }
