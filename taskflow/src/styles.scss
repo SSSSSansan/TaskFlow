@@ -1,1 +1,29 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+    --primary-gradient: linear-gradient(135deg, #7f00ff, #e100ff);
+    --background-color: #f7f9fc;
+    --card-bg: white;
+    --border-radius: 16px;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    --text-color: #333;
+    --accent: #6366f1;
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  body {
+    margin: 0;
+    font-family: var(--font-family);
+    background: var(--background-color);
+    color: var(--text-color);
+  }
+  
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    margin-right: 12px;
+    font-weight: 500;
+  }
+  
+  h1, h2, h3 {
+    margin-bottom: 10px;
+  }
+  
